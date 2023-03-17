@@ -1,0 +1,74 @@
+<mat-card class="container">
+  <mat-card-header>
+    <mat-card-title>邮箱注册</mat-card-title>
+    <mat-card-subtitle
+      ><a
+        [routerLink]="['../phone']"
+        [queryParamsHandling]="'preserve'"
+        class="ablue"
+        >点击此处进入短信注册</a
+      ></mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content>
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="form-horizontal formcontent"
+      *ngIf="!registerResult; else elseTemplate"
+    >
+      <div class="form-group">
+        <mat-form-field
+          [color]="(layoutService.setting | async)?.style"
+          appearance="outline"
+        >
+          <input
+            type="email"
+            matInput
+            formControlName="name"
+            placeholder="请输入邮箱"
+          />
+
+          <mat-error>{{ getErrorMsg(form.get("name")!) }}</mat-error>
+        </mat-form-field>
+        <mat-form-field
+          [color]="(layoutService.setting | async)?.style"
+          appearance="outline"
+          style="margin-left: 10px"
+        >
+          <input
+            type="password"
+            matInput
+            formControlName="password"
+            placeholder="请输入密码"
+          />
+          <mat-hint
+            >8到20位首字母大写且必须包含字母数字不含空格特殊字符</mat-hint
+          >
+          <mat-error>{{ getErrorMsg(form.get("password")!) }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button
+          mat-raised-button
+          type="submit"
+          [color]="(layoutService.setting | async)?.style"
+          [disabled]="form.invalid"
+        >
+          提交
+        </button>
+        <span class="fromerror">{{ getErrorMsg(form) }}</span>
+        <!-- <button type="reset" mat-raised-button>重置</button> -->
+      </div>
+    </form>
+
+    <ng-template #elseTemplate>
+      <div>
+        <div class="center fontxlager">
+          <a [routerLink]="['/userinfo']">注册成功，点击跳转到首页</a>
+        </div>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>设置昵称</h1>
+<div mat-dialog-content>
+  <mat-form-field [color]="(color | async)!" appearance="outline">
+    <input matInput [formControl]="nickname" placeholder="请输入新昵称" />
+    <mat-error>{{ getErrorMsg(nickname) }}</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>取消</button>
+
+  <button
+    mat-raised-button
+    [color]="color | async"
+    [disabled]="nickname.invalid"
+    (click)="onSubmit()"
+  >
+    提交
+  </button>
+</div>

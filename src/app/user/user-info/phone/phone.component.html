@@ -1,0 +1,66 @@
+<h1 mat-dialog-title>设置安全手机号</h1>
+<div mat-dialog-content>
+  <div *ngIf="data.phone || false">
+    <div>即将为你的{{ data.phone }}发送验证码</div>
+
+    <div *ngIf="captchatimer | async as t; else sendbutton">
+      请等待<span style="color: red">{{ t }}</span
+      >秒后再试
+    </div>
+    <ng-template #sendbutton>
+      <div style="margin: 5px 0px">
+        <button
+          mat-raised-button
+          [color]="(color | async)!"
+          (click)="send($event)"
+        >
+          发送验证码
+        </button>
+        <span style="color: red">{{ senderror }}</span>
+      </div>
+    </ng-template>
+
+    <mat-form-field
+      [color]="(color | async)!"
+      appearance="outline"
+      class="ml-1"
+    >
+      <input matInput [formControl]="captchavalue" placeholder="请输入验证码" />
+      <mat-error>{{ getErrorMsg(captchavalue) }}</mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field [color]="(color | async)!" appearance="outline">
+    <input matInput [formControl]="phone" placeholder="请输入手机号" />
+    <mat-error>{{ getErrorMsg(phone) }}</mat-error>
+  </mat-form-field>
+  <div>
+    <span style="color: red">*</span
+    >如果被修改的手机号是登录账号，那么修改后登录名也将被修改
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>取消</button>
+  <div *ngIf="data.phone; else elsebutton">
+    <button
+      mat-raised-button
+      [color]="color | async"
+      matTooltip="修改邮箱"
+      [disabled]="phone.invalid || captchavalue.invalid"
+      (click)="onModifySubmit()"
+    >
+      提交
+    </button>
+  </div>
+  <ng-template #elsebutton>
+    <button
+      mat-raised-button
+      matTooltip="添加新邮箱"
+      [color]="color | async"
+      [disabled]="phone.invalid"
+      (click)="onSubmit()"
+    >
+      提交
+    </button>
+  </ng-template>
+</div>

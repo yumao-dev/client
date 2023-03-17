@@ -1,0 +1,16 @@
+.center{
+    /* height: 200px;
+    width: 80%;
+    margin: auto;
+    padding: 0px; 
+    text-align:center;
+    vertical-align:middle;*/
+    font-size: 2rem;
+    
+    /* display: table-cell; */
+
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%,-50%);
+    position: absolute;
+}

@@ -1,0 +1,9 @@
+{
+    "/api": {
+        "target2": "http://localhost:3000",
+        "target": "https://userservice.yumao.tech",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}

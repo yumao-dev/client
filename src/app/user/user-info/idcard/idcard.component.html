@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>设置安全信息</h1>
+<mat-dialog-content>
+  <!-- <p>What's your favorite animal?</p> -->
+  <mat-form-field [color]="(color | async)!" appearance="outline" class="ml-1">
+    <input matInput [formControl]="idcard" placeholder="请输入身份证" />
+    <mat-error>{{ getErrorMsg(idcard) }}</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>取消</button>
+  <button
+    mat-raised-button
+    [color]="color | async"
+    [disabled]="idcard.invalid"
+    (click)="onSubmit()"
+  >
+    提交
+  </button>
+</mat-dialog-actions>

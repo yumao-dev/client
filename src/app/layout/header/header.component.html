@@ -1,0 +1,121 @@
+<mat-toolbar
+  [color]="(layoutService.setting | async)?.style"
+  class="example-toolbar"
+>
+  <!-- <button mat-icon-button (click)="leftnav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button> -->
+
+  <a mat-icon-button routerLink="/">
+    <mat-icon>home</mat-icon>
+  </a>
+  <!-- <img src="../../../assets/img/logo.png" /> -->
+  <span>LOGO</span>
+
+  <span class="example-spacer"></span>
+
+  <button mat-icon-button [matMenuTriggerFor]="notificationsmenu">
+    <mat-icon matBadge="{{ notifications.length }}" matBadgeColor="warn"
+      >notifications</mat-icon
+    >
+    <span class="cdk-visually-hidden">
+      Example with a home icon with overlaid badge showing the number 15
+    </span>
+  </button>
+
+  <mat-menu #notificationsmenu [class]="'dddd'">
+    <ng-template matMenuContent>
+      <div class="notificationsnav">
+        <div class="title">
+          <span
+            matBadge="{{ notifications.length }}"
+            matBadgeOverlap="false"
+            matBadgeColor="warn"
+            >Notifications</span
+          >
+        </div>
+
+        <ul style="padding-left: 0%; margin-bottom: 2px">
+          <li
+            class="notification"
+            *ngFor="let item of notifications; even as iseven"
+            [ngClass]="{ 'notification-unread': iseven }"
+          >
+            <a href="{{ item.href }}">
+              <div class="image">
+                <img src="{{ item.img }}" alt="Avatar" />
+              </div>
+              <div class="notification-info">
+                <div class="text">
+                  <span class="user-name">{{ item.username }}</span
+                  >{{ item.text }}
+                </div>
+                <span class="date">{{ item.delay }} min ago</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+
+        <div class="footer">
+          <a href="javascript:void()" class="acenter">View all notifications</a>
+        </div>
+      </div>
+    </ng-template>
+  </mat-menu>
+
+  <button mat-icon-button [matMenuTriggerFor]="appsmenu">
+    <mat-icon matBadge="{{ apps.length }}" matBadgeColor="warn">apps</mat-icon>
+    <span class="cdk-visually-hidden">
+      Example with a home icon with overlaid badge showing the number 15
+    </span>
+  </button>
+  <mat-menu #appsmenu [class]="'testappsmenu'">
+    <!-- <ng-template matMenuContent > -->
+    <div class="appsmenu">
+      <mat-grid-list cols="2">
+        <mat-grid-tile class="col" *ngFor="let item of apps">
+          <a target="_blank" href="{{ item.href }}" class="connection-item">
+            <img src="{{ item.img }}" alt="{{ item.text }}" />
+            <span>{{ item.text }}</span>
+          </a>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div class="footer">
+        <a href="javascript:void()" class="acenter">更多</a>
+      </div>
+    </div>
+    <!-- </ng-template> -->
+  </mat-menu>
+
+  <button mat-icon-button [matMenuTriggerFor]="userinfomenu">
+    <mat-icon>account_box</mat-icon>
+  </button>
+
+  <mat-menu #userinfomenu>
+    <div matMenuContent *ngIf="userinfo | async as user">
+      <mat-list class="userinfo">
+        <mat-list-item>
+          <mat-icon matListItemIcon>note</mat-icon>
+          <h4 matListItemTitle>{{ user?.nickname }}</h4>
+          <p matListItemLine class="demo-2">you are welcom</p>
+        </mat-list-item>
+        <mat-list-item (click)="refresh()">
+          <mat-icon matListItemIcon>refresh</mat-icon>
+          <div matListItemTitle>刷新</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon matListItemIcon>face</mat-icon>
+          <div matListItemTitle>账号</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon matListItemIcon>settings</mat-icon>
+          <div matListItemTitle>设置</div>
+        </mat-list-item>
+        <mat-list-item (click)="logout()">
+          <mat-icon matListItemIcon>power</mat-icon>
+          <div matListItemTitle>退出</div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-menu>
+</mat-toolbar>

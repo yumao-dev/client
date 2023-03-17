@@ -1,0 +1,95 @@
+<div *ngIf="userinfoobs | async as userinfo">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar class="cardheader">
+        <img title="avatar" src="assets/img/avatar.png" class="avatar-img" />
+      </div>
+      <mat-card-title>{{ userinfo.nickname }}</mat-card-title>
+      <mat-card-subtitle>欢迎回来</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          昵称:&nbsp;&nbsp;{{ userinfo.nickname }}
+          <button
+            mat-button
+            [color]="color | async"
+            (click)="openNicknameDialog()"
+          >
+            修改
+          </button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          邮箱：&nbsp;&nbsp;{{ userinfo.email }}
+          <button
+            mat-raised-button
+            class="ml-1"
+            [color]="color | async"
+            (click)="openEmailDialog(userinfo)"
+          >
+            设置
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+          手机号：&nbsp;&nbsp;{{ userinfo.phone }}
+          <button
+            mat-raised-button
+            class="ml-1"
+            [color]="color | async"
+            (click)="openPhoneDialog(userinfo)"
+          >
+            设置
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+          身份证：
+          <b *ngIf="userinfo.idcard; else elseidcard">已经填写</b>
+          <ng-template #elseidcard>
+            <button
+              mat-raised-button
+              class="ml-1"
+              [color]="color | async"
+              (click)="openIDcardDialog()"
+            >
+              设置
+            </button>
+          </ng-template>
+        </mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+
+      <table mat-table [dataSource]="loginlogs" class="mat-elevation-z8">
+        <ng-container matColumnDef="indate">
+          <th mat-header-cell *matHeaderCellDef>登陆时间</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.indate | date : "yyyy-MM-dd HH:mm:ss" }}
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="IP">
+          <th mat-header-cell *matHeaderCellDef>IP</th>
+          <td mat-cell *matCellDef="let element">{{ element.ip }}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="App">
+          <th mat-header-cell *matHeaderCellDef>登录应用</th>
+          <td mat-cell *matCellDef="let element">{{ element.app }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <!-- <mat-grid-list cols="2" rowHeight="2:1">
+                <mat-grid-tile>1</mat-grid-tile>
+                <mat-grid-tile>2</mat-grid-tile>
+                <mat-grid-tile>3</mat-grid-tile>
+                <mat-grid-tile>4</mat-grid-tile>
+              </mat-grid-list> -->
+    </mat-card-content>
+  </mat-card>
+</div>

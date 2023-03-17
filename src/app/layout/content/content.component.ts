@@ -1,25 +1,28 @@
 import { Breakpoints, MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/share/service/auth.service';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService, IJWTUser } from 'src/app/share/service/auth.service';
 import { LayoutService } from '../service/layout.service';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss'],
+  selector: 'app-content',
+  templateUrl: './content.component.html',
+  styleUrls: ['./content.component.scss'],
 })
-export class AdminComponent implements OnInit, OnDestroy {
+export class ContentComponent implements OnInit, OnDestroy {
+  user!: Observable<IJWTUser | undefined>;
   mobileQuery: MediaQueryList;
-  links = [
-    { label: '注册', path: 'signup' },
-    { label: '找回密码', path: 'password' },
-    { label: '资料管理', path: 'userinfo' },
-    { label: '绑定账号', path: 'userinfo/bind' },
-  ];
-  activeLink = this.links[0];
-  // @Input() show: boolean;
 
-  routeurl: { url: string; title: string }[] = [];
+  @Input()
+  show!: boolean;
+
+  // routeurl: { url: string; title: string }[] = [];
   app = {
     name: 'bootstrap4--angular2-Template',
     version: '1.0.0',
@@ -47,7 +50,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     },
   };
 
-  private mobilequerylistener: () => void;
+  // private _mobileQueryListener: () => void;
 
   constructor(
     private authservice: AuthService,
@@ -56,13 +59,21 @@ export class AdminComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService
   ) {
     this.mobileQuery = media.matchMedia(Breakpoints.Handset); // 可以判断是不是手机端
-    this.mobilequerylistener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this.mobilequerylistener);
+    // this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    // this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    this.user = this.authservice.usersubject;
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeEventListener('change', this.mobilequerylistener);
+    // this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 
   ngOnInit() {}
+
+  leftSideNavChange = (show: boolean) => {
+    this.layoutService.showLeftaside = show;
+  };
+  rightSideNavChange = (show: boolean) => {
+    this.layoutService.showRightaside = show;
+  };
 }

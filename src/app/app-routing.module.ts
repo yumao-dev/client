@@ -1,16 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './layout/admin/admin.component';
+import { ContentComponent } from './layout/content/content.component';
+import { AuthGuard } from './share/guard/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdminComponent,
+    component: ContentComponent,
     children: [
       {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'user',
+      },
+      {
+        path: 'user',
         loadChildren: () =>
           import('./user/user.module').then((mod) => mod.UserModule),
+      },
+      {
+        path: 'pushmsg',
+        canActivateChild: [AuthGuard],
+        loadChildren: () =>
+          import('./pushmsg/pushmsg.module').then((mod) => mod.PushMsgModule),
       },
     ],
   },

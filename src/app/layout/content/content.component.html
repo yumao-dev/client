@@ -1,0 +1,35 @@
+<div
+  *ngIf="layoutService.setting | async as settings"
+  class="container"
+  [class.is-mobile]="mobileQuery.matches"
+>
+  <app-header *ngIf="settings.showHeader"></app-header>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #lnav
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [opened]="settings.showLeftaside"
+      [fixedInViewport]="mobileQuery.matches"
+      (openedChange)="leftSideNavChange($event)"
+      fixedTopGap="56"
+    >
+      <app-left-sidebar></app-left-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav
+      #rnav
+      [position]="'end'"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [opened]="settings.showRightaside"
+      (openedChange)="rightSideNavChange($event)"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+    >
+      <app-right-sidebar></app-right-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

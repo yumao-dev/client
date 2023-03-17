@@ -1,0 +1,54 @@
+<div class="centercontainer">
+  <mat-stepper linear #stepper [orientation]="(stepperOrientation | async)!">
+    <mat-step errorMessage="{{ webhookerror }}" [completed]="firstcompleted">
+      <ng-template matStepLabel>配置WebHook地址</ng-template>
+      <mat-form-field appearance="outline" style="width: 500px">
+        <mat-label>WebHook地址</mat-label>
+        <input matInput [formControl]="webhook" required type="url" />
+        <mat-error *ngIf="webhook.invalid">{{ webhookerror }}</mat-error>
+        <mat-hint>url地址</mat-hint>
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          [color]="(layout.setting | async)?.style"
+          (click)="save()"
+          matStepperNext
+        >
+          下一步
+        </button>
+      </div>
+    </mat-step>
+    <mat-step label="接口说明以及测试">
+      <mat-list>
+        <mat-list-item> 地址：{{ config.url }}</mat-list-item>
+        <mat-list-item> Method:POST </mat-list-item>
+        <mat-list-item>
+          请求参数： {{ "{msg:" + "'消息内容'" + "}" }}
+        </mat-list-item>
+        <mat-list-item>
+          返回结果：
+          {{ "{Result:bool,Data:bool,Error:" + "'消息内容'" + "}" }}
+        </mat-list-item>
+        <mat-list-item> Result:发送结果，Error：错误详情 </mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <h5>测试</h5>
+      <mat-form-field appearance="outline" style="width: 500px">
+        <mat-label>消息内容</mat-label>
+        <textarea matInput [formControl]="msg" required></textarea>
+        <mat-error *ngIf="msg.invalid">{{ msgerror }}</mat-error>
+        <mat-hint>markdown格式</mat-hint>
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          [color]="(layout.setting | async)?.style"
+          (click)="send()"
+        >
+          发送
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

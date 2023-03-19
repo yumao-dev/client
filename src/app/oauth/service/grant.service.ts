@@ -35,13 +35,13 @@ export class GrantService extends BaseHttpService {
   }
 
   //检查appid存在与否
-  GetApp(appid: string): Observable<string> {
+  GetApp(appid?: string | null): Observable<IDomainEntity> {
     if (!appid) {
-      return throwError(new Error('appid不能为空'));
+      return throwError(() => new Error('appid不能为空'));
     }
-    return this.GetDataHttp<string>(
+    return this.GetDataHttp<IDomainEntity>(
       'GET',
-      `https://yumao.tech/user/api/users/app/${appid}`
+      `https://service.yumao.tech/pms/api/domain/${appid}`
     );
   }
 
@@ -58,4 +58,18 @@ export interface ScopeEntity {
   id: number;
   name: string;
   description: string;
+}
+export interface IDomainEntity {
+  domainid: string;
+  name: string;
+  backurl: string;
+  connstr?: string;
+  appkey: string;
+  description?: string;
+  status: boolean;
+  issite: boolean;
+  owner: number;
+  keyexpiretime: Date;
+  createtime: Date;
+  lastupdatetime: Date;
 }

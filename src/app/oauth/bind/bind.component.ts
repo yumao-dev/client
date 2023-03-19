@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
@@ -74,13 +73,13 @@ export class BindComponent implements OnInit {
       .subscribe(
         (v) => {
           if (v) {
-            this.router.navigate(['/grant'], {
+            this.router.navigate(['grant'], {
               queryParams: this.params,
             });
           }
         },
         (err) => {
-          this.log.debug(err?.message);
+          this.log.Write('Error', err);
         }
       );
 
@@ -94,11 +93,11 @@ export class BindComponent implements OnInit {
         this.params[config.redirecturlname] = paramMap.get(
           config.redirecturlname
         );
-        this.params.appid = paramMap.get('appid');
-        this.params.state = paramMap.get('state');
+        this.params['appid'] = paramMap.get('appid');
+        this.params['state'] = paramMap.get('state');
       },
       error: (err) => {
-        this.log.debug(err?.message);
+        this.log.Write('Error', err);
       },
     });
   }
@@ -129,9 +128,10 @@ export class BindComponent implements OnInit {
           });
         },
         error: (err) => {
-          let msg =
-            err instanceof HttpErrorResponse ? err.error : err?.message || err;
-          this.log.debug(msg);
+          // let msg =
+          //   err instanceof HttpErrorResponse ? err.error : err?.message || err;
+          // this.log.debug(msg);
+          this.log.Write('Error', err);
         },
       });
   };

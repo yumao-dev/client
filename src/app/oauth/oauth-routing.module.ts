@@ -5,9 +5,7 @@ import { BindComponent } from './bind/bind.component';
 import { GrantComponent } from './grant/grant.component';
 import { LoginComponent } from './login/login.component';
 import {
-  AppGuard,
   AppResolver,
-  AppUserGuard,
   BindResolver,
   SourceResolver,
 } from './service/app.resolver';
@@ -23,8 +21,6 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: '登录认证',
-    canActivate: [AppGuard],
-    canLoad: [AppGuard],
     resolve: {
       appid: AppResolver,
     },
@@ -33,7 +29,7 @@ const routes: Routes = [
     path: 'grant',
     component: GrantComponent,
     title: '授予权限',
-    canActivate: [AuthGuard, AppUserGuard],
+    canActivate: [AuthGuard],
     resolve: {
       appid: AppResolver,
     },

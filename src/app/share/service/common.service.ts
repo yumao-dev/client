@@ -11,7 +11,7 @@ export class CommonService {
   private $breadcrumbs = new BehaviorSubject<
     Array<{ label: Data; url: string }>
   >([]);
-  constructor(router: Router, activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, activatedRoute: ActivatedRoute) {
     this.isphone = fromEvent(window, 'resize').pipe(
       startWith(0),
       map((a) => {
@@ -56,5 +56,14 @@ export class CommonService {
 
   public get breadcrumbs() {
     return this.$breadcrumbs.asObservable();
+  }
+
+  public goto(url: string) {
+    let u = new URL(url);
+    if (location.hostname == u.hostname) {
+      this.router.navigateByUrl(url.substring(u.origin.length));
+    } else {
+      location.href = url;
+    }
   }
 }

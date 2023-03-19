@@ -35,9 +35,12 @@ export class ConfigService extends BaseHttpService {
       )
       .pipe(
         map((result) => {
+          let url = new URL(result.oauthurl);
+          url.searchParams.set(result.appidname, result.appkey);
           return {
             ...result,
             remoteconfig: ConfigService.remoteconfig,
+            oauthurl: url.toString(),
           };
         })
       )
@@ -47,8 +50,10 @@ export class ConfigService extends BaseHttpService {
 
 export interface IConfig {
   appname: string;
+  appkey: string;
   oauthurl: string;
   oauthcodename: string;
+  appidname: string;
   oauthstatename: string;
   redirecturlname: string;
   tokenname: string; // 本地存储的tokenname

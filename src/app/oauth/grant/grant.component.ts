@@ -9,10 +9,11 @@ import {
   ReplaySubject,
 } from 'rxjs';
 import { concatMap, filter, map, switchMap, take, tap } from 'rxjs/operators';
-import { AuthService } from 'src/app/share/service/auth.service';
+import { CommonService } from 'src/app/share/service/common.service';
 import { ConfigService } from 'src/app/share/service/config.service';
 import { LogService } from 'src/app/share/service/log.service';
 import { GrantService, ScopeEntity } from '../service/grant.service';
+import { OauthService } from '../service/oauth.service';
 
 @Component({
   selector: 'app-grant',
@@ -33,28 +34,28 @@ export class GrantComponent implements OnInit {
     public service: GrantService,
     private log: LogService,
     private route: ActivatedRoute,
-    protected authservice: AuthService,
-    protected configservice: ConfigService
+    protected oauthservice: OauthService,
+    protected configservice: ConfigService,
+    protected common: CommonService
   ) {}
 
   ngOnInit() {
-    this.route.queryParamMap
+    combineLatest([
+      this.configservice.RemoteConfig,
+      this.route.queryParamMap,
+      this.route.data,
+    ])
       .pipe(
-        filter((a) => a && a.has('appid')),
-        concatMap((a) => {
-          return this.configservice.RemoteConfig.pipe(
-            map((config) => {
-              return {
-                appid: a.get('appid'),
-                // scope: a.get("scope") || 'base',
-                state: a.get(config.oauthstatename),
-                redirect: a.get(config.redirecturlname),
-              } as QueryParam;
-            })
-          );
+        map(([config, a, data]) => {
+          return {
+            appid: data[config.appidname],
+            // scope: a.get("scope") || 'base',
+            state: a.get(config.oauthstatename),
+            redirect: a.get(config.redirecturlname),
+          } as QueryParam;
         }),
         concatMap((a) => {
-          return this.authservice.tokenObservable.pipe(
+          return this.oauthservice.token.pipe(
             filter((b) => Boolean(b)),
             take(1),
             map((b) => {
@@ -82,7 +83,7 @@ export class GrantComponent implements OnInit {
                 let url = new URL(b.url);
                 if (a.code) url.searchParams.append(c.oauthcodename, a.code);
                 if (a.state) url.searchParams.append(c.oauthstatename, a.state);
-                location.href = url.href;
+                this.common.goto(url.href);
               }
             }),
             map(([b, c]) => {
@@ -133,7 +134,13 @@ export class GrantComponent implements OnInit {
     this.service.SureGrant(p).subscribe(
       (result) => {
         if (!result) {
-          this.log.debug('授权失败，需要重试', '用户授权异常');
+          this.log.Write(
+            'INFO',
+            '授权失败，需要重试',
+            '用户授权异常',
+            false,
+            true
+          );
         } else {
           this.refresh.next(true);
         }
@@ -141,7 +148,7 @@ export class GrantComponent implements OnInit {
       (err) => {
         let msg =
           err instanceof HttpErrorResponse ? err.error : err?.message || err;
-        this.log.error(msg, '用户授权异常', true);
+        this.log.Write('Error', msg, '用户授权异常', true, true);
       }
     );
   }

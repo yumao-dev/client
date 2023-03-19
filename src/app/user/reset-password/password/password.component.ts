@@ -179,16 +179,16 @@ export class PasswordComponent implements OnInit {
           }
         })
       )
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           if (result) {
             // this.stepper.next();
-            window.location.href = '/';
+            location.href = '/';
           } else {
             this.idcardForm.setErrors({ service: true });
           }
         },
-        (err: Error) => {
+        error: (err: Error) => {
           // 弹出注册失败的提示
           this.idcardForm.setErrors({
             service:
@@ -198,8 +198,8 @@ export class PasswordComponent implements OnInit {
                 ? err.message
                 : true,
           });
-        }
-      );
+        },
+      });
   }
 
   onMobileSubmit(): void {

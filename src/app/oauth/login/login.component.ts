@@ -6,12 +6,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { AsyncSubject, Observable, of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { AuthService, IJWTUser } from 'src/app/share/service/auth.service';
 import { LogService } from 'src/app/share/service/log.service';
 import { CaptchaService } from '../service/captcha.service';
+import { OauthService } from '../service/oauth.service';
 import { UnionUserService } from '../service/unionuser.service';
 declare var vaptcha: any;
 const passwordreg =
@@ -27,12 +28,13 @@ export class LoginComponent implements OnInit {
   // showcaptcha!: Observable<boolean>;
   captchacompleted = new AsyncSubject<boolean>();
   backurl: string = 'grant';
-  currentUser: Observable<IJWTUser>;
+  currentUser: Observable<IJWTUser | undefined>;
   hide = true; //是否显示密码
   appid!: string;
   alipayurl!: string;
   constructor(
     public authservice: AuthService,
+    private oauthservice: OauthService,
     private fb: FormBuilder,
     private log: LogService,
     private captchaservice: CaptchaService,
@@ -48,7 +50,7 @@ export class LoginComponent implements OnInit {
         key: [],
       }),
     });
-    this.currentUser = this.authservice.user;
+    this.currentUser = this.authservice.usersubject;
 
     this.route.queryParamMap
       .pipe(
@@ -63,7 +65,7 @@ export class LoginComponent implements OnInit {
     this.route.data
       .pipe(
         concatMap((data) => {
-          this.appid = data.appid;
+          this.appid = data['appid'];
           return this.service.GetOAuthUrl();
         })
       )
@@ -89,8 +91,8 @@ export class LoginComponent implements OnInit {
       this.vaptcha_obj = vaptchaObj; //将VAPTCHA验证实例保存到局部变量中
       vaptchaObj.listen('pass', () => {
         let serverToken = vaptchaObj.getServerToken();
-        this.form.controls.captcha.get('key')!.setValue(serverToken.server);
-        this.form.controls.captcha.get('value')!.setValue(serverToken.token);
+        this.form.controls['captcha'].get('key')!.setValue(serverToken.server);
+        this.form.controls['captcha'].get('value')!.setValue(serverToken.token);
         this.captchacompleted!.next(true);
         this.captchacompleted!.complete();
       });
@@ -120,7 +122,7 @@ export class LoginComponent implements OnInit {
           if (need && (!formvalue.captcha.key || !formvalue.captcha.value)) {
             throw new Error('请进行人机验证');
           }
-          return this.authservice.signIn(formvalue, this.appid);
+          return this.oauthservice.signIn(formvalue, this.appid);
         })
       )
       .subscribe({
@@ -134,20 +136,26 @@ export class LoginComponent implements OnInit {
           let msg =
             err instanceof HttpErrorResponse ? err.error : err?.message || err;
           this.vaptcha_obj?.reset();
-          return this.log.debug(msg);
+          return this.log.Write('Error', msg, undefined, true, true);
         },
       });
   }
 
   goto() {
     if (this.backurl) {
+      let tree: UrlTree;
       if (this.backurl.includes('?')) {
-        this.router.navigateByUrl(this.backurl);
+        tree = this.router.parseUrl(this.backurl);
       } else {
-        this.router.navigate([this.backurl], {
+        // tree = this.router.parseUrl(this.backurl);
+
+        tree = this.router.createUrlTree([this.backurl], {
+          relativeTo: this.route.parent,
           queryParamsHandling: 'preserve',
         });
       }
+
+      this.router.navigateByUrl(tree);
     }
   }
 

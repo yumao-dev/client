@@ -74,13 +74,12 @@ export const AppGuard: CanActivateFn = (
 ) => {
   const router = inject(Router);
   const grantService = inject(GrantService);
+  const configService = inject(ConfigService);
 
-  let appid = route.queryParamMap.get('appid');
-
-  return grantService.GetApp(appid).pipe(
-    map((a) => {
-      return Boolean(a);
-    }),
+  return configService.RemoteConfig.pipe(
+    map((c) => route.queryParamMap.get(c.appidname)),
+    concatMap((appid) => grantService.GetApp(appid)),
+    map((a) => Boolean(a)),
     catchError((err) => {
       let msg =
         err instanceof HttpErrorResponse ? err.error : err?.message || err;
@@ -89,7 +88,6 @@ export const AppGuard: CanActivateFn = (
         queryParams: { msg: msg },
         queryParamsHandling: 'merge',
       });
-
       return of(tree);
     })
   );

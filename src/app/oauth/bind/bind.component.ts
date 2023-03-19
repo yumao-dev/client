@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { concatMap, map, take, tap } from 'rxjs/operators';
-import { AuthService, IJWTUser } from 'src/app/share/service/auth.service';
+import { AuthService } from 'src/app/share/service/auth.service';
 import { ConfigService, IConfig } from 'src/app/share/service/config.service';
 import { LocalStorageService } from 'src/app/share/service/localstorage.service';
 import { LogService } from 'src/app/share/service/log.service';
@@ -20,7 +20,6 @@ export class BindComponent implements OnInit {
     appid: string;
     source: keyof typeof Platform | undefined;
   }>;
-  currentUser: Observable<IJWTUser | undefined>;
   params: Params = {};
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +30,6 @@ export class BindComponent implements OnInit {
     public authservice: AuthService,
     private router: Router
   ) {
-    this.currentUser = this.authservice.usersubject;
     this.data = this.route.data.pipe(
       take(1),
       map((data) => {

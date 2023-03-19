@@ -2,14 +2,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
-import { AsyncSubject, Observable, of } from 'rxjs';
+import { AsyncSubject, of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
-import { AuthService, IJWTUser } from 'src/app/share/service/auth.service';
+import { AuthService } from 'src/app/share/service/auth.service';
 import { LogService } from 'src/app/share/service/log.service';
 import { CaptchaService } from '../service/captcha.service';
 import { OauthService } from '../service/oauth.service';
@@ -28,30 +28,32 @@ export class LoginComponent implements OnInit {
   // showcaptcha!: Observable<boolean>;
   captchacompleted = new AsyncSubject<boolean>();
   backurl: string = 'grant';
-  currentUser: Observable<IJWTUser | undefined>;
   hide = true; //是否显示密码
   appid!: string;
   alipayurl!: string;
   constructor(
     public authservice: AuthService,
     private oauthservice: OauthService,
-    private fb: FormBuilder,
     private log: LogService,
     private captchaservice: CaptchaService,
     private router: Router,
     private route: ActivatedRoute,
     private service: UnionUserService
   ) {
-    this.form = this.fb.group({
-      name: ['', [Validators.required, this.nameValidator]],
-      password: ['', [Validators.required, Validators.pattern(passwordreg)]], // 多个验证参数
-      captcha: this.fb.group({
-        value: [],
-        key: [],
+    this.form = new FormGroup({
+      name: new FormControl({
+        value: '',
+        validators: [Validators.required, this.nameValidator],
+      }),
+      password: new FormControl({
+        value: '',
+        validators: [Validators.required, Validators.pattern(passwordreg)],
+      }), // 多个验证参数
+      captcha: new FormGroup({
+        value: new FormControl(),
+        key: new FormControl(),
       }),
     });
-    this.currentUser = this.authservice.usersubject;
-
     this.route.queryParamMap
       .pipe(
         tap((a) => {
@@ -71,7 +73,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((result) => {
         let redirecturl = encodeURIComponent(
-          `http://oauth.yumao.tech/bind/alipay${location.search}`
+          `http://user.yumao.tech/oauth/bind/alipay${location.search}`
         );
         this.alipayurl = `${result.alipay}${redirecturl}`;
       });

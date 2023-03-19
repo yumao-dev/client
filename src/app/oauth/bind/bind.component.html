@@ -9,7 +9,10 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list role="list">
-        <mat-list-item role="listitem" *ngIf="currentUser | async as user">
+        <mat-list-item
+          role="listitem"
+          *ngIf="authservice.usersubject | async as user"
+        >
           <button mat-raised-button color="primary" (click)="bind()">
             绑定
           </button>
@@ -26,8 +29,6 @@
           </a>
         </mat-list-item>
       </mat-list>
-
-      <div *ngIf="currentUser | async as user"></div>
     </mat-card-content>
   </mat-card>
 </div>

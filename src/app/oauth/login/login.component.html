@@ -12,7 +12,7 @@
     <mat-card-subtitle>info.info</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div *ngIf="currentUser | async as user">
+    <div *ngIf="authservice.usersubject | async as user">
       <!-- <span>账号:<b>{{user.name}}</b>已经登陆，是否使用此账号</span> -->
       <span style="cursor: pointer" (click)="goto()">
         点击此处使用已登录账号<b>{{ user.name }}</b>

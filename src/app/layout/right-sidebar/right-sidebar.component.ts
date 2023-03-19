@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
   map,
-  mergeMap,
-  tap,
 } from 'rxjs/operators';
 import { LayoutService } from '../service/layout.service';
 
@@ -33,7 +31,6 @@ interface ContactUser {
 export class RightSidebarComponent implements OnInit {
   // @Input() show: boolean;
   currentUser: ContactUser | undefined;
-  public currentStyle: ThemePalette = 'primary';
   contactUsers!: Observable<Array<ContactUser>>;
   search = new BehaviorSubject<string | null>(null);
   constructor(public layoutService: LayoutService) {}
@@ -63,25 +60,22 @@ export class RightSidebarComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.contactUsers = this.search.pipe(
-      filter((a) => !!a),
-      tap((event) => {
-        console.log(event);
-      }),
-      debounceTime(1000),
-      distinctUntilChanged(),
-      mergeMap((search) => {
-        return of(this.users).pipe(
-          map((user, index) => {
-            return user.filter((b) => {
-              if (b && b.name) {
-                return b.name.toLowerCase().includes(search!.toLowerCase());
-              } else {
-                return false;
-              }
-            });
-          })
-        );
+    this.contactUsers = combineLatest([
+      of(this.users),
+      this.search.pipe(
+        filter((a) => Boolean(a)),
+        debounceTime(1000),
+        distinctUntilChanged()
+      ),
+    ]).pipe(
+      map(([users, search]) => {
+        return users.filter((b) => {
+          if (b && b.name) {
+            return b.name.toLowerCase().includes(search!.toLowerCase());
+          } else {
+            return false;
+          }
+        });
       })
     );
   }

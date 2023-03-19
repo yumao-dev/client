@@ -71,10 +71,22 @@ export class LayoutService extends BaseHttpService {
   }
 
   public get Sites(): Observable<ISite[]> {
-    return this.GetDataHttp<ISite[]>(
-      'GET',
-      'https://service.yumao.tech/pms/api/domain/query'
-    );
+    // return this.GetDataHttp<ISite[]>(
+    //   'GET',
+    //   'https://service.yumao.tech/pms/api/domain/query'
+    // );
+    return of([
+      {
+        name: '用户中心',
+        backurl: 'https://user.yumao.tech/user',
+        description: '用户中心',
+      },
+      {
+        name: '消息推送',
+        backurl: 'https://user.yumao.tech/pushmsg',
+        description: '消息推送',
+      },
+    ] as ISite[]);
   }
 }
 

@@ -1,0 +1,101 @@
+<!--
+ * @Author: Diego 493223447@qq.com
+ * @Date: 2021-08-25 10:22:31
+ * @LastEditors: Diego 493223447@qq.com
+ * @LastEditTime: 2023-02-24 10:31:57
+ * @FilePath: \oauth\src\app\login\login.component.html
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by Diego, All Rights Reserved. 
+-->
+<mat-card class="logincontainer">
+  <mat-card-header>
+    <!-- <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>登录</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+    <!-- <mat-card-title>登录</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+    <div mat-card-avatar class="cardheader">
+      <img src="assets/img/logo-xx.png" class="logo-img" />
+    </div>
+    <mat-card-title>登录</mat-card-title>
+    <mat-card-subtitle>info.info</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="currentUser | async as user">
+      <!-- <span>账号:<b>{{user.name}}</b>已经登陆，是否使用此账号</span> -->
+      <span style="cursor: pointer" (click)="goto()">
+        点击此处使用已登录账号<b>{{ user.name }}</b>
+      </span>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="login()" novalidate>
+      <div class="login-form">
+        <!-- <div class="form-group row login-tools">
+              <div class="col-6 login-remember">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Remember Me</span>
+                </label>
+              </div>
+              <div class="col-6 login-forgot-password"><a href="pages-forgot-password.html" tppabs="http://foxythemes.net/preview/products/beagle/pages-forgot-password.html">Forgot Password?</a></div>
+            </div> -->
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>账号</mat-label>
+          <input matInput placeholder="请输入账号..." formControlName="name" />
+          <mat-error *ngIf="form.get('name')!.invalid"
+            >请填写正确的账号名</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>密码</mat-label>
+          <input
+            matInput
+            placeholder="请输入密码..."
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')!.invalid"
+            >请填写正确的密码</mat-error
+          >
+        </mat-form-field>
+
+        <div
+          style="
+            margin: auto;
+            width: fit-content;
+            padding-top: 15px;
+            margin-right: 15px;
+          "
+        >
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            登录
+          </button>
+          <a mat-raised-button href="http://user.yumao.tech/signup">注册</a>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-footer>
+    其他登录方式:
+    <a href="{{ alipayurl }}">
+      <img
+        src="https://img.alicdn.com/tfs/TB1qEwuzrj1gK0jSZFOXXc7GpXa-32-32.ico"
+      />
+    </a>
+  </mat-card-footer>
+</mat-card>

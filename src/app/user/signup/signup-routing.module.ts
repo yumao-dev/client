@@ -7,13 +7,13 @@ const routes: Routes = [
   {
     path: 'phone',
     component: PhoneComponent,
-    data: { title: '快速注册' },
+    title: '快速注册',
     // outlet: 'authout'
   },
   {
     path: 'email',
     component: EmailComponent,
-    data: { title: '邮箱注册' },
+    title: '邮箱注册',
     // outlet: 'authout'
   },
   {

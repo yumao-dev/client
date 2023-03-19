@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: '**',
     component: ErrorComponent,
-    data: { title: 'ERROR' },
+    title: 'ERROR',
   },
 ];
 

@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: PushMsgContentComponent,
-    data: { title: '消息内容' },
+    title: '消息内容',
   },
 ];
 

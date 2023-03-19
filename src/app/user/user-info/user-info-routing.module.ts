@@ -7,14 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: UserinfoComponent,
-    data: { title: '用户信息' },
+    title: '用户信息',
     // canActivate: [AuthGuard],
     // outlet: 'authout'
   },
   {
     path: 'bind',
     component: BindComponent,
-    data: { title: '绑定账号' },
+    title: '绑定账号',
     // canActivate: [AuthGuard],
     // outlet: 'authout'
   },

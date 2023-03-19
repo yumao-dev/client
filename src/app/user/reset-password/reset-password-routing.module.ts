@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: PasswordComponent,
-    data: { title: '找回密码' },
+    title: '找回密码',
     // outlet: 'authout'
   },
 ];

@@ -13,7 +13,7 @@ const routes: Routes = [
       {
         path: '',
         component: IndexComponent,
-        data: { title: '首页' },
+        //title: '首页' ,
       },
       {
         path: 'userinfo',

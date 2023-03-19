@@ -24,6 +24,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pushmsg/pushmsg.module').then((mod) => mod.PushMsgModule),
       },
+      // {
+      //   path: 'oauth',
+      //   canActivateChild: [AuthGuard],
+      //   loadChildren: () =>
+      //     import('./oauth/oauth.module').then((mod) => mod.OauthModule),
+      // },
     ],
   },
 ];

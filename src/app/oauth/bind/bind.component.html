@@ -1,0 +1,33 @@
+<div *ngIf="!isbind">
+  <mat-card class="logincontainer">
+    <mat-card-header>
+      <div mat-card-avatar class="cardheader">
+        <img src="assets/img/logo-xx.png" class="logo-img" />
+      </div>
+      <mat-card-title>绑定账号</mat-card-title>
+      <mat-card-subtitle>第三方账号绑定</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem" *ngIf="currentUser | async as user">
+          <button mat-raised-button color="primary" (click)="bind()">
+            绑定
+          </button>
+          已登录账号:<b>{{ user.name }}</b>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <a
+            class="none"
+            [routerLink]="['/login']"
+            queryParamsHandling="preserve"
+            target="_blank"
+          >
+            登录其他账号
+          </a>
+        </mat-list-item>
+      </mat-list>
+
+      <div *ngIf="currentUser | async as user"></div>
+    </mat-card-content>
+  </mat-card>
+</div>

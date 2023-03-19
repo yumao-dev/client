@@ -1,0 +1,38 @@
+<mat-card class="grantcontainer">
+  <mat-card-header>
+    <div mat-card-avatar class="cardheader">
+      <img src="assets/img/logo-xx.png" class="logo-img" />
+    </div>
+    <mat-card-title>授权</mat-card-title>
+    <mat-card-subtitle>授权用户信息</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="scopes | async as allscopes; else loading" class="center">
+      <form [formGroup]="form" (ngSubmit)="sure()">
+        <input type="text" formControlName="appid" hidden />
+        <div class="form-group" formGroupName="scopes">
+          <div *ngFor="let item of allscopes">
+            <!-- <mat-slide-toggle [formControlName]="item.id" ngDefaultControl>{{item.description}}</mat-slide-toggle> -->
+            <mat-checkbox class="example-margin" [formControlName]="item.id">{{
+              item.description
+            }}</mat-checkbox>
+          </div>
+        </div>
+        <div class="center">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            授权
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <ng-template #loading>
+      <mat-spinner class="center"></mat-spinner>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

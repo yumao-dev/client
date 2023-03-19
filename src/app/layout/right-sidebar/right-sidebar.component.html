@@ -1,90 +1,106 @@
-<mat-tab-group [backgroundColor]="(layoutService.setting | async)?.style" dynamicHeight [color]="(layoutService.setting | async)?.style" class="tabgroup">
-    <!-- [dynamicHeight]="true" -->
-    <mat-tab label="交流" class="tab-chat">
-        <div class="contact-list" [hidden]="currentUser">
-            <mat-nav-list>
-                <div class="user1">
-                    <h3 matSubheader>Recent</h3>
-                    <mat-divider></mat-divider>
+<mat-tab-group
+  [backgroundColor]="(layoutService.setting | async)?.style"
+  dynamicHeight
+  [color]="(layoutService.setting | async)?.style"
+  class="tabgroup"
+>
+  <!-- [dynamicHeight]="true" -->
+  <mat-tab label="交流" class="tab-chat">
+    <div class="contact-list" [hidden]="currentUser">
+      <mat-nav-list>
+        <div class="user1">
+          <h3 matSubheader>Recent</h3>
+          <mat-divider></mat-divider>
 
-                    <mat-list-item *ngFor="let item of users" (click)="enterChat(item)" class="user-data">
-                        <img matListAvatar [src]="item.avatar" alt="Avatar">
-                        <span matLine class="name"> {{item.name}} </span>
-                        <p matLine class="message">{{item.message}}</p>
-                        <!-- <mat-icon matListIcon>menu</mat-icon>  matBadge="4" matBadgeOverlap="false"-->
-                        <!-- <span class="status" [ngClass]="{'away': item.status==1,'offline':item.status==2}"></span> 标记用户在线状态的点 -->
-                        <!-- <div class="user-data" >
+          <mat-list-item
+            *ngFor="let item of users"
+            (click)="enterChat(item)"
+            class="user-data"
+          >
+            <img matListAvatar [src]="item.avatar" alt="Avatar" />
+            <span matLine class="name"> {{ item.name }} </span>
+            <p matLine class="message">{{ item.message }}</p>
+            <!-- <mat-icon matListIcon>menu</mat-icon>  matBadge="4" matBadgeOverlap="false"-->
+            <!-- <span class="status" [ngClass]="{'away': item.status==1,'offline':item.status==2}"></span> 标记用户在线状态的点 -->
+            <!-- <div class="user-data" >
                     <span class="status" [ngClass]="{'away': item.status==1,'offline':item.status==2}"></span>
                     <span class="name">{{item.name}}</span>
                     <span class="message">{{item.message}}</span>
                 </div> -->
-                    </mat-list-item>
-                </div>
-            </mat-nav-list>
-
-            <mat-divider></mat-divider>
-            <div class="bottom-input">
-                <mat-form-field class="full-width">
-                    <!-- <mat-label>Favorite food</mat-label> -->
-                    <input matInput placeholder="搜索用户" type="search" (keyup)="searchUser($event)">
-                    <!-- <mat-hint>好友或者用户名</mat-hint>
-                    <mat-error>errorMessage</mat-error> -->
-                </mat-form-field>
-
-                <!-- <span class="zmdi zmdi-search"></span> -->
-            </div>
-            <mat-divider></mat-divider>
-            <mat-nav-list>
-                <h3 matSubheader>Contacts</h3>
-                <div class="user1">
-                    <mat-list-item *ngFor="let item of contactUsers |async" (click)="enterChat(item)" class="user-data">
-                        <img matListAvatar [src]="item.avatar" alt="Avatar">
-                        <span matLine class="name"> {{item.name}} </span>
-                    </mat-list-item>
-                </div>
-            </mat-nav-list>
-
-
+          </mat-list-item>
         </div>
+      </mat-nav-list>
 
+      <mat-divider></mat-divider>
+      <div class="bottom-input">
+        <mat-form-field class="full-width">
+          <!-- <mat-label>Favorite food</mat-label> -->
+          <input
+            matInput
+            placeholder="搜索用户"
+            type="search"
+            (keyup)="searchUser($event)"
+          />
+          <!-- <mat-hint>好友或者用户名</mat-hint>
+                    <mat-error>errorMessage</mat-error> -->
+        </mat-form-field>
 
+        <!-- <span class="zmdi zmdi-search"></span> -->
+      </div>
+      <mat-divider></mat-divider>
+      <mat-nav-list>
+        <h3 matSubheader>Contacts</h3>
+        <div class="user1">
+          <mat-list-item
+            *ngFor="let item of contactUsers | async"
+            (click)="enterChat(item)"
+            class="user-data"
+          >
+            <img matListAvatar [src]="item.avatar" alt="Avatar" />
+            <span matLine class="name"> {{ item.name }} </span>
+          </mat-list-item>
+        </div>
+      </mat-nav-list>
+    </div>
 
-        <div class="chat-window" [hidden]="!currentUser" *ngIf="currentUser">
-            <div class="title">
-                <div class="user">
-                    <img src="{{currentUser.avatar}}" alt="Avatar">
-                    <h2>{{currentUser.name}}</h2>
-                    <span>{{currentUser.lasttime||'不知道'}}</span>
+    <div class="chat-window" [hidden]="!currentUser" *ngIf="currentUser">
+      <div class="title">
+        <div class="user">
+          <img src="{{ currentUser.avatar }}" alt="Avatar" />
+          <h2>{{ currentUser.name }}</h2>
+          <span>{{ currentUser.lasttime || "不知道" }}</span>
+        </div>
+        <!-- reply -->
+        <button class="icon" mat-icon-button (click)="quitChat()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      </div>
+      <div class="chat-messages">
+        <div class="be-scroller">
+          <div class="content">
+            <ul>
+              <li class="friend">
+                <div class="msg">Hello</div>
+              </li>
+              <li class="self">
+                <div class="msg">Hi, how are you?</div>
+              </li>
+              <li class="friend">
+                <div class="msg">Good, I'll need support with my pc</div>
+              </li>
+              <li class="self">
+                <div class="msg">
+                  Sure, just tell me what is going on with your computer?
                 </div>
-                <!-- reply -->
-                <button class="icon" mat-icon-button (click)="quitChat()">
-                    <mat-icon>keyboard_arrow_left</mat-icon>
-                </button>
-            </div>
-            <div class="chat-messages">
-                <div class="be-scroller">
-                    <div class="content">
-                        <ul>
-                            <li class="friend">
-                                <div class="msg">Hello</div>
-                            </li>
-                            <li class="self">
-                                <div class="msg">Hi, how are you?</div>
-                            </li>
-                            <li class="friend">
-                                <div class="msg">Good, I'll need support with my pc</div>
-                            </li>
-                            <li class="self">
-                                <div class="msg">Sure, just tell me what is going on with your computer?</div>
-                            </li>
-                            <li class="friend">
-                                <div class="msg">I don't know it just turns off suddenly</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="chat-input">
+              </li>
+              <li class="friend">
+                <div class="msg">I don't know it just turns off suddenly</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="chat-input">
                 <div class="input-wrapper">
                     <span class="photo zmdi zmdi-camera"></span>
                     <mat-icon matSuffix>camera</mat-icon>
@@ -93,228 +109,155 @@
                     <mat-icon matSuffix>send</mat-icon>
                 </div>
             </div> -->
-            <div class="bottom-input">
-                <mat-form-field class="full-width">
-                    <mat-icon matPrefix class="buttonicon">photo</mat-icon>
-                    <input matInput placeholder="Message..." type="text">
-                    <mat-icon matSuffix class="buttonicon">send</mat-icon>
-                    <!-- keyboard_return -->
-                    <!-- <mat-hint>提示标签</mat-hint>
+      <div class="bottom-input">
+        <mat-form-field class="full-width">
+          <mat-icon matPrefix class="buttonicon">photo</mat-icon>
+          <input matInput placeholder="Message..." type="text" />
+          <mat-icon matSuffix class="buttonicon">send</mat-icon>
+          <!-- keyboard_return -->
+          <!-- <mat-hint>提示标签</mat-hint>
                     <mat-error>errorMessage</mat-error> -->
-                </mat-form-field>
-            </div>
-
-        </div>
-
-
-
-        <!-- <div role="tabpanel" [ngClass]="{'active show':dropdown.chat}" class="tab-pane tab-chat">
-            <div class="chat-contacts">
-                <div class="chat-sections">
-                    <div class="be-scroller">
-                        <div class="content">
-                            <h2>Recent</h2>
-                            <div class="contact-list contact-list-recent">
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar1.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar1.png" alt="Avatar">
-                                        <div class="user-data">
-                                            <span class="status away"></span>
-                                            <span class="name">Claire Sassu</span>
-                                            <span class="message">Can you share the...</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar2.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar2.png" alt="Avatar">
-                                        <div class="user-data">
-                                            <span class="status"></span>
-                                            <span class="name">Maggie jackson</span>
-                                            <span class="message">I confirmed the info.</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar3.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar3.png" alt="Avatar">
-                                        <div class="user-data">
-                                            <span class="status offline"></span>
-                                            <span class="name">Joel King </span>
-                                            <span class="message">Ready for the meeti...</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <h2>Contacts</h2>
-                            <div class="contact-list">
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar4.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar4.png" alt="Avatar">
-                                        <div class="user-data2">
-                                            <span class="status"></span>
-                                            <span class="name">Mike Bolthort</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar5.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar5.png" alt="Avatar">
-                                        <div class="user-data2">
-                                            <span class="status"></span>
-                                            <span class="name">Maggie jackson</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="user">
-                                    <a href="#">
-                                        <img src="assets/img/avatar6.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar6.png" alt="Avatar">
-                                        <div class="user-data2">
-                                            <span class="status offline"></span>
-                                            <span class="name">Jhon Voltemar</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-input">
-                    <input type="text" placeholder="Search..." name="q">
-                    <span class="zmdi zmdi-search"></span>
-                </div>
-            </div>
-            <div class="chat-window">
-                <div class="title">
-                    <div class="user">
-                        <img src="assets/img/avatar2.png" tppabs="http://foxythemes.net/preview/products/beagle/assets/img/avatar2.png" alt="Avatar">
-                        <h2>Maggie jackson</h2>
-                        <span>Active 1h ago</span>
-                    </div>
-                    <span class="icon return zmdi zmdi-chevron-left"></span>
-                </div>
-                <div class="chat-messages">
-                    <div class="be-scroller">
-                        <div class="content">
-                            <ul>
-                                <li class="friend">
-                                    <div class="msg">Hello</div>
-                                </li>
-                                <li class="self">
-                                    <div class="msg">Hi, how are you?</div>
-                                </li>
-                                <li class="friend">
-                                    <div class="msg">Good, I'll need support with my pc</div>
-                                </li>
-                                <li class="self">
-                                    <div class="msg">Sure, just tell me what is going on with your computer?</div>
-                                </li>
-                                <li class="friend">
-                                    <div class="msg">I don't know it just turns off suddenly</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <div class="input-wrapper">
-                        <span class="photo zmdi zmdi-camera"></span>
-                        <input type="text" placeholder="Message..." name="q" autocomplete="off">
-                        <span class="send-msg zmdi zmdi-mail-send"></span>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    </mat-tab>
-    <mat-tab label="待完成">
-        <div class="bottom-input">
-            <mat-form-field class="full-width">
-                <!-- <mat-label>Favorite food</mat-label> -->
-                <input matInput placeholder="Create new task..." type="text">
-                <mat-icon matSuffix class="buttonicon">add</mat-icon>
-                <!-- keyboard_return -->
-                <!-- <mat-hint>提示标签</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="待完成">
+    <div class="bottom-input">
+      <mat-form-field class="full-width">
+        <!-- <mat-label>Favorite food</mat-label> -->
+        <input matInput placeholder="Create new task..." type="text" />
+        <mat-icon matSuffix class="buttonicon">add</mat-icon>
+        <!-- keyboard_return -->
+        <!-- <mat-hint>提示标签</mat-hint>
                     <mat-error>errorMessage</mat-error> -->
-            </mat-form-field>
-        </div>
-        <mat-list>
-            <span matSubheader class="category-title">Today</span>
-            <mat-divider></mat-divider>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style">Initialize the project</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style">Create the main structure</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style" [checked]="true">Updates changes to GitHub</mat-checkbox>
-            </mat-list-item>
-            <mat-divider></mat-divider>
+      </mat-form-field>
+    </div>
+    <mat-list>
+      <span matSubheader class="category-title">Today</span>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-checkbox [color]="(layoutService.setting | async)?.style"
+          >Initialize the project</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [color]="(layoutService.setting | async)?.style"
+          >Create the main structure</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >Updates changes to GitHub</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-divider></mat-divider>
 
-            <span matSubheader class="category-title">Tomorrow</span>
-            <mat-divider></mat-divider>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style" [labelPosition]="'before'">Initialize the project</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style">Create the main structure</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style" [checked]="true">Updates changes to GitHub</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [color]="(layoutService.setting | async)?.style" [checked]="true">This task is too long to be displayed in a normal space!</mat-checkbox>
-            </mat-list-item>
+      <span matSubheader class="category-title">Tomorrow</span>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-checkbox
+          [color]="(layoutService.setting | async)?.style"
+          [labelPosition]="'before'"
+          >Initialize the project</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [color]="(layoutService.setting | async)?.style"
+          >Create the main structure</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >Updates changes to GitHub</mat-checkbox
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >This task is too long to be displayed in a normal
+          space!</mat-checkbox
+        >
+      </mat-list-item>
+    </mat-list>
+  </mat-tab>
+  <mat-tab label="设置">
+    <mat-list>
+      <span matSubheader class="category-title">General</span>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <!-- <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [labelPosition]="'before'">Available</mat-slide-toggle> -->
+        <!-- <mat-label>风格</mat-label> [(ngModel)]="currentStyle"-->
+        <!-- 风格 -->
+        <span class="example-button-toggle-label"> 风格 </span>
+        <mat-button-toggle-group
+          [value]="(layoutService.setting | async)?.style"
+          aria-label="更改主体风格"
+          aria-labelledby="更改主体风格"
+          (change)="changeColor($event.source.value)"
+          [appearance]="'legacy'"
+        >
+          <mat-button-toggle value="primary"> Primary </mat-button-toggle>
+          <mat-button-toggle value="accent"> Accent </mat-button-toggle>
+          <mat-button-toggle value="warn"> warn </mat-button-toggle>
+          <mat-button-toggle> Default </mat-button-toggle>
+        </mat-button-toggle-group>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [color]="(layoutService.setting | async)?.style"
+          >Enable notifications</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >Login with Facebook</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-divider></mat-divider>
 
-        </mat-list>
-    </mat-tab>
-    <mat-tab label="设置">
-        <mat-list>
-            <span matSubheader class="category-title">General</span>
-            <mat-divider></mat-divider>
-            <mat-list-item>
-                <!-- <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [labelPosition]="'before'">Available</mat-slide-toggle> -->
-                <!-- <mat-label>风格</mat-label> [(ngModel)]="currentStyle"-->
-                <!-- 风格 -->
-                <span class="example-button-toggle-label"> 风格 </span>
-                <mat-button-toggle-group [value]="(layoutService.setting |async)?.style" aria-label="更改主体风格" aria-labelledby="更改主体风格" (change)="changeColor($event.source.value)" [appearance]="'legacy'">
-                    <mat-button-toggle value="primary"> Primary </mat-button-toggle>
-                    <mat-button-toggle value="accent"> Accent </mat-button-toggle>
-                    <mat-button-toggle value="warn"> warn </mat-button-toggle>
-                    <mat-button-toggle> Default </mat-button-toggle>
-                </mat-button-toggle-group>
+      <span matSubheader class="category-title">Notifications</span>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-slide-toggle
+          [color]="(layoutService.setting | async)?.style"
+          [labelPosition]="'before'"
+          >Email notifications</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [color]="(layoutService.setting | async)?.style"
+          >Project updates</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >New comments</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle
+          [color]="(layoutService.setting | async)?.style"
+          [checked]="true"
+          >Chat messages</mat-slide-toggle
+        >
+      </mat-list-item>
+      <mat-divider></mat-divider>
 
-            </mat-list-item>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style">Enable notifications</mat-slide-toggle>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [checked]="true">Login with Facebook</mat-slide-toggle>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-
-            <span matSubheader class="category-title">Notifications</span>
-            <mat-divider></mat-divider>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [labelPosition]="'before'">Email notifications</mat-slide-toggle>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style">Project updates</mat-slide-toggle>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [checked]="true">New comments</mat-slide-toggle>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style" [checked]="true">Chat messages</mat-slide-toggle>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-
-            <span matSubheader class="category-title">Workflow</span>
-            <mat-divider></mat-divider>
-            <mat-list-item>
-                <mat-slide-toggle [color]="(layoutService.setting | async)?.style">Deploy on commit</mat-slide-toggle>
-            </mat-list-item>
-        </mat-list>
-
-    </mat-tab>
+      <span matSubheader class="category-title">Workflow</span>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-slide-toggle [color]="(layoutService.setting | async)?.style"
+          >Deploy on commit</mat-slide-toggle
+        >
+      </mat-list-item>
+    </mat-list>
+  </mat-tab>
 </mat-tab-group>

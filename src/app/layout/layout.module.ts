@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -25,16 +21,13 @@ import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
     CommonModule,
     RouterModule,
     ShareModule,
-    MatIconModule,
-    MatButtonModule,
+
     MatMenuModule,
     MatTabsModule,
-    MatListModule,
     MatToolbarModule,
     MatGridListModule,
     MatBadgeModule,
     MatSlideToggleModule,
-    MatCheckboxModule,
     MatButtonToggleModule,
     MatSidenavModule,
   ],

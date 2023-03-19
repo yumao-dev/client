@@ -1,8 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms'; // <-- NgModel lives here 双向绑定
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ShareModule } from '../share/share.module';
@@ -11,13 +10,12 @@ import { PushMsgRoutingModule } from './pushmsg-routing.module';
 
 @NgModule({
   imports: [
+    CommonModule,
     PushMsgRoutingModule,
     ReactiveFormsModule,
     ShareModule,
-    MatCardModule,
     MatStepperModule,
     MatProgressSpinnerModule,
-    MatListModule,
   ],
   declarations: [PushMsgContentComponent],
   providers: [

@@ -48,7 +48,8 @@ export class GrantComponent implements OnInit {
       .pipe(
         map(([config, a, data]) => {
           return {
-            appid: data[config.appidname],
+            // appid: a.get(config.appidname),
+            appid: data['appid'],
             // scope: a.get("scope") || 'base',
             state: a.get(config.oauthstatename),
             redirect: a.get(config.redirecturlname),

@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((result) => {
         let redirecturl = encodeURIComponent(
-          `http://user.yumao.tech/oauth/bind/alipay${location.search}`
+          `${location.protocol}//${location.host}/oauth/bind/alipay${location.search}`
         );
         this.alipayurl = `${result.alipay}${redirecturl}`;
       });

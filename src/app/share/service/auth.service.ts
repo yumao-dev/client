@@ -1,10 +1,10 @@
 ﻿import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { catchError, concatMap, map, take, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
+import { CommonService } from './common.service';
 import { ConfigService } from './config.service';
 import { LocalStorageService } from './localstorage.service';
 import { LogService } from './log.service';
@@ -19,7 +19,7 @@ export class AuthService extends BaseHttpService implements OnDestroy {
 
   constructor(
     http: HttpClient,
-    private router: Router,
+    private commonservice: CommonService,
     protected localstorage: LocalStorageService,
     private config: ConfigService,
     private log: LogService
@@ -152,20 +152,12 @@ export class AuthService extends BaseHttpService implements OnDestroy {
         }
 
         return url;
-      }),
-      tap((url) => {
-        if (url.href !== location.href) {
-          // this.log.debug(`跳转到：${url.href}`);
-          if (url.host === location.host) {
-            // this.router.navigateByUrl(this.router.parseUrl(url.href));
-            this.router.navigateByUrl(url.pathname);
-          } else {
-            // 跳转
-            location.href = url.href;
-          }
-        }
       })
-    ).subscribe();
+    ).subscribe((url) => {
+      if (url.href !== location.href) {
+        this.commonservice.goto(url);
+      }
+    });
   };
 }
 

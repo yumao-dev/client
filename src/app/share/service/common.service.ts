@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
@@ -6,12 +6,12 @@ import { filter, map, startWith } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class CommonService {
+export class CommonService implements OnDestroy, OnInit {
   isphone: Observable<boolean>;
   private $breadcrumbs = new BehaviorSubject<
     Array<{ label: Data; url: string }>
   >([]);
-  constructor(private router: Router, activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute) {
     this.isphone = fromEvent(window, 'resize').pipe(
       startWith(0),
       map((a) => {
@@ -23,14 +23,15 @@ export class CommonService {
         );
       })
     );
-
-    router.events
+  }
+  ngOnInit(): void {
+    this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         map((event) => {
           // debugger;
           const breadcrumbs: Array<{ label: Data; url: string }> = [];
-          let currentRoute: ActivatedRoute | null = activatedRoute.root;
+          let currentRoute: ActivatedRoute | null = this.route.root;
           let url = '';
           do {
             const childrenRoutes = currentRoute.children;
@@ -53,17 +54,20 @@ export class CommonService {
       )
       .subscribe(this.$breadcrumbs);
   }
+  ngOnDestroy(): void {
+    this.$breadcrumbs.unsubscribe();
+  }
 
   public get breadcrumbs() {
     return this.$breadcrumbs.asObservable();
   }
 
-  public goto(url: string) {
-    let u = new URL(url);
-    if (location.hostname == u.hostname) {
-      this.router.navigateByUrl(url.substring(u.origin.length));
+  public goto(url: URL) {
+    if (location.hostname == url.hostname) {
+      // this.router.navigateByUrl(this.router.parseUrl(url.href));
+      this.router.navigateByUrl(`${url.pathname}${url.search}`);
     } else {
-      location.href = url;
+      location.href = url.href;
     }
   }
 }

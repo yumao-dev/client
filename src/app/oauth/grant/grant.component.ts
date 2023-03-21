@@ -83,7 +83,7 @@ export class GrantComponent implements OnInit {
                 let url = new URL(b.url);
                 if (a.code) url.searchParams.append(c.oauthcodename, a.code);
                 if (a.state) url.searchParams.append(c.oauthstatename, a.state);
-                this.common.goto(url.href);
+                this.common.goto(url);
               }
             }),
             map(([b, c]) => {

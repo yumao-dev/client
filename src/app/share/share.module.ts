@@ -54,7 +54,6 @@ import { ErrorComponent } from './error/error.component';
 // import { AlertModalComponent } from './alert-modal/alert-modal.component';
 // import { AlertsComponent } from './alerts/alerts.component';
 import { AuthHttpInterceptor } from './interceptor/auth.httpinterceptor';
-import { ErrorHttpInterceptor } from './interceptor/error.httpinterceptor';
 import { LoggingInterceptor } from './interceptor/log.httpinterceptor';
 import { ParamHttpInterceptor } from './interceptor/param.httpinterceptor';
 import { FilterPipe, GetPipe } from './pipe/filter.pipe';
@@ -114,7 +113,6 @@ import { ShareRoutingModule } from './share-routing.module';
     { provide: HTTP_INTERCEPTORS, useClass: ParamHttpInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorHttpInterceptor, multi: true },
   ],
 })
 export class ShareModule {

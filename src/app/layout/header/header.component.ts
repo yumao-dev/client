@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, take, tap } from 'rxjs';
+import { ISite } from 'src/app/share/service/common.service';
 import { AuthService, IJWTUser } from '../../share/service/auth.service';
-import { ISite, LayoutService } from '../service/layout.service';
+import { LayoutService } from '../service/layout.service';
 
 @Component({
   selector: 'app-header',
@@ -49,7 +50,7 @@ export class HeaderComponent implements OnInit {
         result.forEach((item, i) => {
           let n = Math.round((Math.random() * 10) % 5);
           n = n || 5;
-          item.imageurl = `assets/img/app/app-${n}.png`;
+          item['imageurl'] = `assets/img/app/app-${n}.png`;
           item.name = item.name.substring(0, 4);
           // item.backurl = new URL(item.backurl).origin;
         });

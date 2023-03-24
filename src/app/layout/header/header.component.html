@@ -83,7 +83,10 @@
           <mat-grid-list cols="3">
             <mat-grid-tile class="col" *ngFor="let item of apps">
               <div class="connection-item" (click)="goApp(item)">
-                <img src="{{ item.imageurl }}" alt="{{ item.description }}" />
+                <img
+                  src="{{ item['imageurl'] }}"
+                  alt="{{ item.description }}"
+                />
                 <span>{{ item.name }}</span>
               </div>
             </mat-grid-tile>

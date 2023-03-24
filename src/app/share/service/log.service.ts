@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of, Subject } from 'rxjs';
@@ -54,12 +54,15 @@ export class LogService {
     type: keyof typeof LogLevel,
     msg: Error | string,
     title?: string,
-    tohttp: boolean = true,
-    showalert: boolean = false
+    tohttp: boolean = false,
+    showalert: boolean = true
   ): void {
-    let message =
-      msg instanceof Error ? (isDevMode() ? msg.stack : msg.message) : msg;
-    this.log(type, message!, title || msg.toString(), tohttp, showalert);
+    let message = msg as string;
+    if (msg instanceof Error)
+      message = isDevMode() ? msg.stack || msg.message : msg.message;
+    if (msg instanceof HttpErrorResponse)
+      message = isDevMode() ? msg.message : msg.error;
+    this.log(type, message!, title || '标题', tohttp, showalert);
   }
 
   private log(

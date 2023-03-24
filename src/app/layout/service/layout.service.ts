@@ -4,6 +4,7 @@ import { ThemePalette } from '@angular/material/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BaseHttpService } from 'src/app/share/service/base-http.service';
+import { ISite } from 'src/app/share/service/common.service';
 
 export interface Settings {
   name: string;
@@ -71,10 +72,6 @@ export class LayoutService extends BaseHttpService {
   }
 
   public get Sites(): Observable<ISite[]> {
-    // return this.GetDataHttp<ISite[]>(
-    //   'GET',
-    //   'https://service.yumao.tech/pms/api/domain/query'
-    // );
     return of([
       {
         name: '用户中心',
@@ -99,14 +96,4 @@ export interface LayoutConfig {
 export enum MenuStep {
   content,
   config,
-}
-
-export interface ISite {
-  domainid: string;
-  name: string;
-  backurl: string;
-  description: string;
-  imageurl: string;
-  status: boolean;
-  issite: boolean;
 }

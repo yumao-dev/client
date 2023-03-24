@@ -1,17 +1,27 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
+import { BaseHttpService } from './base-http.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommonService implements OnDestroy, OnInit {
+export class CommonService
+  extends BaseHttpService
+  implements OnDestroy, OnInit
+{
   isphone: Observable<boolean>;
   private $breadcrumbs = new BehaviorSubject<
     Array<{ label: Data; url: string }>
   >([]);
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(
+    http: HttpClient,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    super(http);
     this.isphone = fromEvent(window, 'resize').pipe(
       startWith(0),
       map((a) => {
@@ -70,4 +80,17 @@ export class CommonService implements OnDestroy, OnInit {
       location.href = url.href;
     }
   }
+  QuerySite = (issite: boolean, status: boolean) => {
+    return this.GetDataHttp<ISite[]>(
+      'GET',
+      `https://service.yumao.tech/pms/api/domain/${issite}/${status}`
+    );
+  };
+}
+export interface ISite {
+  domainid: string;
+  name: string;
+  description: string;
+  backurl: string;
+  [k: string]: string;
 }

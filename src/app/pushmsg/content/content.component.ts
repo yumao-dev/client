@@ -103,9 +103,8 @@ export class PushMsgContentComponent implements OnInit {
     } else if (this.config.code) {
       this.appService.SendMsg(this.config.code, this.msg.value).subscribe({
         next: (result) => {
-          if (result)
-            this.log.Write('INFO', '发送成功', undefined, false, true);
-          else this.log.Write('INFO', '发送成功', undefined, false, true);
+          if (result) this.log.Write('INFO', '发送成功');
+          else this.log.Write('INFO', '发送成功');
         },
         error: (err) => {
           this.msgerror = err.message;

@@ -135,13 +135,7 @@ export class GrantComponent implements OnInit {
     this.service.SureGrant(p).subscribe(
       (result) => {
         if (!result) {
-          this.log.Write(
-            'INFO',
-            '授权失败，需要重试',
-            '用户授权异常',
-            false,
-            true
-          );
+          this.log.Write('INFO', '授权失败，需要重试', '用户授权异常');
         } else {
           this.refresh.next(true);
         }
@@ -149,7 +143,7 @@ export class GrantComponent implements OnInit {
       (err) => {
         let msg =
           err instanceof HttpErrorResponse ? err.error : err?.message || err;
-        this.log.Write('Error', msg, '用户授权异常', true, true);
+        this.log.Write('Error', msg, '用户授权异常');
       }
     );
   }

@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -135,10 +134,8 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (err) => {
-          let msg =
-            err instanceof HttpErrorResponse ? err.error : err?.message || err;
           this.vaptcha_obj?.reset();
-          return this.log.Write('Error', msg, undefined, true, true);
+          return this.log.Write('Error', err);
         },
       });
   }

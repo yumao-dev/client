@@ -28,7 +28,7 @@ export const AppResolver: ResolveFn<string | null> = (
     }),
     map((app) => app.domainid),
     catchError((err) => {
-      log.Write('Error', err, undefined, false, true);
+      log.Write('Error', err);
       return of(null);
     })
   );

@@ -31,7 +31,7 @@ export class LoggingInterceptor implements HttpInterceptor {
               if (!islog && event instanceof HttpResponse && event.ok) {
                 let elapsed = Date.now() - started;
                 let msg = `${req.method}\t"${req.urlWithParams}"\t  successed  \tin\t${elapsed}\tms`;
-                logservice.Write('INFO', msg, '网络访问情况', true);
+                logservice.Write('INFO', msg, '网络访问情况', true, false);
               }
             },
             error: (event) => {

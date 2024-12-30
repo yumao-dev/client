@@ -10,13 +10,13 @@ export class PushMsgService extends BaseHttpService {
   }
 
   private get domain() {
-    return !isDevMode() || true ? 'https://yumao.tech/pushmsg' : '';
+    return !isDevMode() || true ? 'https://service/yumao.tech/store' : '';
   }
 
   public AddConfig(entity: IConfigEntity): Observable<boolean> {
     return super.GetDataHttp<boolean>(
       entity.id && entity.id > 0 ? 'PUT' : 'POST',
-      `${this.domain}/api/config/${
+      `${this.domain}/api/pushmsg/config/${
         entity.id && entity.id > 0 ? entity.id : ''
       }`,
       { webhook: entity.webhook }
@@ -28,7 +28,7 @@ export class PushMsgService extends BaseHttpService {
       .GetDataHttp<IConfigEntity>('GET', `${this.domain}/api/config`)
       .pipe(
         tap((config) => {
-          config.url = `${this.domain}/api/msg/send/${config.code}`;
+          config.url = `${this.domain}/api/pushmsg/msg/send/${config.code}`;
         })
       );
   }
@@ -36,7 +36,7 @@ export class PushMsgService extends BaseHttpService {
   public SendMsg(code: string, msg: string): Observable<boolean> {
     return super.GetDataHttp<boolean>(
       'POST',
-      `${this.domain}/api/msg/send/${code}`,
+      `https://log.yumao.tech/msg/send/${code}`,
       {
         msg: msg,
       }
